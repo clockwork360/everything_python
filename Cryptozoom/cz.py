@@ -104,7 +104,7 @@ bc1 = (myapi.ticker("BCH/USD")['last'])
 ### Start of the Google Sheets Api Script  | Documentation https://gspread.readthedocs.io/en/latest/
 ## https://www.techwithtim.net/tutorials/google-sheets-python-api-tutorial/  |  https://www.youtube.com/watch?v=cnPlKLEGR7E
 scope = ["https://spreadsheets.google.com/feeds",'https://www.googleapis.com/auth/spreadsheets',"https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive"]
-creds = ServiceAccountCredentials.from_json_keyfile_name("/home/kali/Desktop/Projects/CryptoZoom/creds.json", scope)
+creds = ServiceAccountCredentials.from_json_keyfile_name("/home/kali/Desktop/Projects/everything_python/Cryptozoom/creds.json", scope)
 client = gspread.authorize(creds)
 
 #----Google Sheets API Primer----#
