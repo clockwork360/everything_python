@@ -8,6 +8,19 @@ from requests import Session, Request
 from oauth2client.service_account import ServiceAccountCredentials
 from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
 
+'''
+#Set environment variables
+username = os.environ['USER']
+api_key = os.environ['KEY']
+api_secret = os.environ['SECRET']
+'''
+
+#Get Keys
+username = 'up125942624' 
+api_key = 'QwHotLUGHkmShCNaYgjN52WC56Q'
+api_secret = 'XLMwB6aqxy9BULyua7u6im73E48'
+
+
 
 #-------Color Coding Variables------#
 O = '\033[33m'
@@ -69,7 +82,17 @@ def email_alert():
 
 ##############################################################################################################
 ## CEX API ##   https://github.com/matveyco/cex.io-api-python
-myapi = cexio.Api('up125942624', 'QwHotLUGHkmShCNaYgjN52WC56Q', 'XLMwB6aqxy9BULyua7u6im73E48')
+myapi = cexio.Api(username, api_key, api_secret)
+
+
+# Print open orders
+o_orders = myapi.open_orders('BTC/USD')
+print ("Open Orders:")
+print (o_orders)
+print ("\n")
+
+#Print Buy Limit Order
+#buy = myapi.buy_limit_order()
 
 #----------BTC/USD-----------#
 btc_usd659 = "Ticker (BTC/USD)"
@@ -96,7 +119,7 @@ lt1 = (myapi.ticker("LTC/USD")['last'])
 bch_usd105 = "Ticker (BCH/USD)"
 bc1 = (myapi.ticker("BCH/USD")['last'])
 
-#--print ("CEX:" + " "+ G + btc_usd659, O + last_price, G + etc_usd103, O + et1, G + xlm_usd315, O + xl1, G + dash_usd886, O + da1, G + xrp_usd237, O + xr1, G + ltc_usd105, O + lt1)
+print ("CEX:" + " "+ G + btc_usd659, O + last_price, G + etc_usd103, O + et1, G + xlm_usd315, O + xl1, G + dash_usd886, O + da1, G + xrp_usd237, O + xr1, G + ltc_usd105, O + lt1)
 
 ##############################################################################################################
 
@@ -109,7 +132,7 @@ client = gspread.authorize(creds)
 
 #----Google Sheets API Primer----#
 
-# How to use the shhets api will be placed here
+# How to use the sheets api will be placed here
 
 #--------------------------------#
 
@@ -132,11 +155,10 @@ data = sheet.get_all_records()
 #--colA = sheet.col_values(1)
 
 ### BTC/USD Order ID:20746142724 Function Calls to My Purchased Crypto Live Percent Changes ###
-
 def percentchange():
     _bi = sheet.cell(24,5).value
     _lp = last_price
-    tpercent = 0.10
+    tpercent = 0.01
     ttpercent = 0.02
     eresult = ((float(_lp) - float(_bi))/abs(float(_bi)))
     if eresult >= tpercent:
@@ -144,23 +166,21 @@ def percentchange():
         sid = account_sid
         token = auth_token
         twphone = tphone
-        pnum = myphone 
-
+        pnum = myphone
         client = Client(sid, token)
         client.messages.create(to=pnum,from_=twphone,body="BTC/USD Has reached the target Limit!")
-'''
+        
     elif eresult <= ttpercent:
-        bal = cexio.Api('balance', 'QwHotLUGHkmShCNaYgjN52WC56Q','XLMwB6aqxy9BULyua7u6im73E48')
-        mybal = (myapi.balance()['balance'])
+        bal = myapi.balance('balance')
         print ("\n")
         print ("Buy Order Setup")
         print ("-----------------")
-        print (mybal)
+        print (bal)
         print ("-----------------") 
         print ("\n")
     else:
-print ("Check BTC/USD Fuction on line 134")
-'''
+        print ("Check BTC/USD Fuction on line 134")
+
 percentchange()
 
 
@@ -228,7 +248,7 @@ percentchange4()
 ### Function Calls to My Purchased Crypto Live Percent Changes XRP/USD Order ID:19694843237 ###
 def percentchange5():
     _xrp1lp = xr1
-    _xrp1bi = sheet.cell(28,5).value
+    _xrp1bi = sheet.cell(40,5).value
     num5 = 0.10
     xr1result = ((float(_xrp1lp) - float(_xrp1bi))/abs(float(_xrp1bi)))
     if xr1result >= num5:
@@ -244,168 +264,6 @@ def percentchange5():
 percentchange5()
 
 
-'''
-### Function Calls to My Purchased Crypto Live Percent Changes XRP/USD Order XRP2 ID:20171205105 ###
-def percentchange6():
-    _xrp2lp = xr1
-    _xrp2bi = sheet.cell(29,5).value
-    num6 = 0.1
-    xr2result = ((float(_xrp2lp) - float(_xrp2bi))/abs(float(_xrp2bi)))
-    if xr2result >= num6:
-        sid = account_sid
-        token = auth_token
-        twphone = tphone
-        pnum = myphone 
-
-        client = Client(sid, token)
-        client.messages.create(to=pnum,from_=twphone,body="XRP/USD Has reached the target Limit!")
-    else:
-        return
-        pass
-percentchange6()
-'''
-'''
-### Function Calls to My Purchased Crypto Live Percent Changes XRP/USD Order XRP6a ID:20171205105 ###
-def percentchange6a():
-    _xrp3lp = xr1
-    _xrp3bi = sheet.cell(34,5).value
-    num6a = 0.02
-    xr3result = ((float(_xrp3lp) - float(_xrp3bi))/abs(float(_xrp3bi)))
-    if xr3result >= num6a:
-        sid = account_sid
-        token = auth_token
-        twphone = tphone
-        pnum = myphone 
-
-        client = Client(sid, token)
-        client.messages.create(to=pnum,from_=twphone,body="XRP/USD Has reached the target Limit!")
-    else:
-        return
-        pass
-percentchange6a()
-'''
-'''
-### Function Calls to My Purchased Crypto Live Percent Changes XRP/USD Order XRP2 ID:21019671205 ###
-def percentchange6b():
-    _xrp4lp = xr1
-    _xrp4bi = sheet.cell(35,5).value
-    num6b = 0.03
-    xr4result = ((float(_xrp4lp) - float(_xrp4bi))/abs(float(_xrp4bi)))
-    if xr4result >= num6b:
-        sid = account_sid
-        token = auth_token
-        twphone = tphone
-        pnum = myphone 
-
-        client = Client(sid, token)
-        client.messages.create(to=pnum,from_=twphone,body="XRP/USD 6b Has reached the target Limit!")
-    else:
-        return
-        pass
-percentchange6b()
-'''
-'''
-### Function Calls to My Purchased Crypto Live Percent Changes BAT/USD Order ID:20746786018 ###
-def percentchange7():
-    _batbi = sheet.cell(30,5).value
-    _batlp = bat
-    tpercent = 0.01
-    eresult = ((float(_batlp) - float(_batbi))/abs(float(_batbi)))
-    if eresult >= tpercent:
-        sid = account_sid
-        token = auth_token
-        twphone = tphone
-        pnum = myphone 
-
-        client = Client(sid, token)
-        client.messages.create(to=pnum,from_=twphone,body="BAT/USD Has reached the target limit!") 
-    else:
-        return
-        pass
-percentchange7()
-'''
-'''
-### Function Calls to My Purchased Crypto Live Percent Changes BAT/USD Order BAT2 ID:20746786018 ###
-def percentchange8():
-    _bat2bi = sheet.cell(31,5).value
-    _bat2lp = bat
-    e2percent = 0.01
-    e2result = ((float(_bat2lp) - float(_bat2bi))/abs(float(_bat2bi)))
-    if e2result >= e2percent:
-        sid = account_sid
-        token = auth_token
-        twphone = tphone
-        pnum = myphone 
-
-        client = Client(sid, token)
-        client.messages.create(to=pnum,from_=twphone,body="BAT/USD BAT2 Has reached the target limit!") 
-    else:
-        return
-        pass
-percentchange8()
-'''
-
-'''
-### Function Calls to My Purchased Crypto Live Percent Changes LTC/USD Order ID:20846089659 ###
-def percentchange9():
-    _ltcbi = sheet.cell(32,5).value
-    _ltclp = lt1
-    lpercent = 0.20
-    lresult = ((float(_ltclp) - float(_ltcbi))/abs(float(_ltcbi)))
-    if lresult >= lpercent:
-        sid = account_sid
-        token = auth_token
-        twphone = tphone
-        pnum = myphone 
-
-        client = Client(sid, token)
-        client.messages.create(to=pnum,from_=twphone,body="LTC/USD Has reached the target limit!") 
-    else:
-        return
-        pass
-percentchange9()
-'''
-'''
-### Function Calls to My Purchased Crypto Live Percent Changes BCH/USD Order ID: 19694465315 ###
-
-def percentchange10():
-    _bchlp = bc1
-    _bchbi = sheet.cell(33,5).value
-    bcpercent = 0.05
-    bcresult = ((float(_bchlp) - float(_bchbi))/abs(float(_bchbi)))
-    if bcresult >= bcpercent:
-        sid = account_sid
-        token = auth_token
-        twphone = tphone
-        pnum = myphone 
-
-        client = Client(sid, token)
-        client.messages.create(to=pnum,from_=twphone,body="BCH/USD Has reached the target Limit!")
-    else:
-        return
-        pass
-percentchange10()
-'''
-'''
-### Function Calls to My Purchased Crypto Live Percent Changes LTC/USD Order ID:21156722422 ###
-def pcltc2():
-    _ltc2bi = sheet.cell(36,5).value
-    _ltc2lp = lt1
-    lpercent = 0.02
-    lresult = ((float(_ltc2lp) - float(_ltc2bi))/abs(float(_ltc2bi)))
-    if lresult >= lpercent:
-        sid = account_sid
-        token = auth_token
-        twphone = tphone
-        pnum = myphone 
-
-        client = Client(sid, token)
-        client.messages.create(to=pnum,from_=twphone,body="LTC/USD LTC2 Has reached the target limit!") 
-    else:
-        return
-        pass
-pcltc2()
-'''
 #----------------------------------------------------#
 ## Insert the row and  the list as a row at index 4
 #--insertRow = ["hello", 5, "red", "blue"]
@@ -457,12 +315,12 @@ dash_cell()
 def xrp1_cell():
     # Get Buyin Price
     lprice = xr1
-    xr1_in = sheet.cell(28,5).value
+    xr1_in = sheet.cell(40,5).value
     xrp1result = ((float(lprice) - float(xr1_in))/abs(float(xr1_in)))
     # Get Percentage
-    xrp1usd_sheet = sheet.update_cell(28,8, "{:.0%}".format(xrp1result))
+    xrp1usd_sheet = sheet.update_cell(40,8, "{:.0%}".format(xrp1result))
     # Get current price and ouput to cell
-    xrp1usd_cp = sheet.update_cell(28,9, lprice)
+    xrp1usd_cp = sheet.update_cell(40,9, lprice)
     #---------------Start price drop detection--------------------#
     pbuyin = 1 # Get negative percent by using a positive whole number
     pcent = (pbuyin * float(lprice))/100 # Calculate percent loss position
@@ -474,7 +332,7 @@ def xrp1_cell():
     print ("Loss Equals: " + str(loss))
     print ("-------------------------")
     # Add (DD) Drop Detection to cell
-    dd = sheet.update_cell(28,10, loss)
+    dd = sheet.update_cell(40,10, loss)
     # Add statements
     llprice = lprice
     nodrop = float(llprice) > float(loss)
@@ -602,6 +460,7 @@ class color:
    END = '\033[0m'
 
 '''
+print ('ORDER HISTORY')
 print ('USD PAIRS |    DATE    |  ORDER ID   |  AMOUNT  |  BUYIN PRICE  |  FEE  |  TOTAL  | % CHANGE')
 print (' BTC/USD  | 12/21/2020 | 20841191289 |  0.0221  |   23121.9     |  1.28 |  512.27 |   1%')
 #---------------------------------------#
@@ -612,55 +471,3 @@ print (' BTC/USD  | 12/21/2020 | 20841191289 |  0.0221  |   23121.9     |  1.28 
 
 ## Calling Email Function ##
 #--email_alert()
-'''
-#url = "wss://ws.cex.io/ws"
-#print (url)
-url = "wss://ws.cex.io/ws"
-ws = websocket.WebSocket()
-print ("\n")
-print ("\n")
-print ("Sending Connection Request...")
-ws.connect(url)
-ws.send ("Connection Requested.")
-print ("Establishing Connection...")
-result = ws.recv()
-print ("Received '%s'" % result)
-#endpoint = (ws.connect, "/connected")
-#print (endpoint)
-ws.close()
-
-#try:
-#    import thread
-#except ImportError:
-#    import _thread as thread
-#def on_message(ws, message):
-#    print (message)
-
-#def on_error(ws, error):
-#    print (error)
-
-#def on_close(ws):
-#    print ('### closed /###')
-'''
-
-'''
-def on_open(ws):
-    def run(*args):
-        for i in range(3):
-            time.sleep(1)
-            ws.send("Hello %d" % i)
-        time.sleep(1)
-        ws.close()
-        print("thread terminating...")
-    thread.start_new_thread(run, ())
-'''
-#ticker = "ticker"
-#def ticker1 (ws, ticker):
-#    print (ticker)
-#ticker1(ws, ticker)
-#if __name__ == "__main__":
-#    websocket.enableTrace(True)
-#    ws = websocket.WebSocketApp("wss://ws.cex.io/ws",on_message = on_message, on_error = on_error, on_close = on_close)
-#    ws.on_open = on_open
-#    ws.run_forever()
-#ws.ticker1 = ticker1
