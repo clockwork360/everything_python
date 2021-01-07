@@ -155,7 +155,7 @@ data = sheet.get_all_records()
 #--colA = sheet.col_values(1)
 
 ### BTC/USD Order ID:20746142724 Function Calls to My Purchased Crypto Live Percent Changes ###
-def percentchange():
+def btc_usd1():
     _bi = sheet.cell(24,5).value
     _lp = last_price
     tpercent = 0.01
@@ -168,8 +168,8 @@ def percentchange():
         twphone = tphone
         pnum = myphone
         client = Client(sid, token)
-        client.messages.create(to=pnum,from_=twphone,body="BTC/USD Has reached the target Limit!")
-        
+        client.messages.create(to=pnum,from_=twphone,body="BTC/USD_1 Has reached it's target Limit!")
+'''
     elif eresult <= ttpercent:
         bal = myapi.balance('balance')
         print ("\n")
@@ -180,30 +180,31 @@ def percentchange():
         print ("\n")
     else:
         print ("Check BTC/USD Fuction on line 134")
-
-percentchange()
-
-
 '''
+btc_usd1()
+
+
+
 ### Function Calls to My Purchased Crypto Live Percent Changes ETH/USD Order ID: 19513647103 ###
-def percentchange2():
+def btc_usd2():
     _ethbi = sheet.cell(25,5).value
     _ethlp = et1
-    num2 = 0.40
+    tpercent = 0.01
+    ttpercent = 0.02
     result2 = ((float(_ethlp) - float(_ethbi))/abs(float(_ethbi)))
-    if result2 >= num2:
+    if result2 >= tpercent:
         sid = account_sid
         token = auth_token
         twphone = tphone
         pnum = myphone 
 
         client = Client(sid, token)
-        client.messages.create(to=pnum,from_=twphone,body="ETH/USD Has reached the target Limit!")
+        client.messages.create(to=pnum,from_=twphone,body="BTC_USD2 Has reached it's target Limit!")
     else:
         return
         pass
-percentchange2()
-'''
+btc_usd2()
+
 '''
 ### Function Calls to My Purchased Crypto Live Percent Changes XLM/USD Order ID: 19694465315 ###
 def percentchange3():
@@ -246,12 +247,13 @@ percentchange4()
 '''
 
 ### Function Calls to My Purchased Crypto Live Percent Changes XRP/USD Order ID:19694843237 ###
-def percentchange5():
+def xrp_usd1():
     _xrp1lp = xr1
     _xrp1bi = sheet.cell(40,5).value
-    num5 = 0.10
+    tpercent = 0.50
+    ttpercent = 0.02
     xr1result = ((float(_xrp1lp) - float(_xrp1bi))/abs(float(_xrp1bi)))
-    if xr1result >= num5:
+    if xr1result >= tpercent:
         sid = account_sid
         token = auth_token
         twphone = tphone
@@ -261,7 +263,7 @@ def percentchange5():
     else:
         return
         pass
-percentchange5()
+xrp_usd1()
 
 
 #----------------------------------------------------#
@@ -281,16 +283,16 @@ def btc_cell():
     btcusd_cp = sheet.update_cell(24,9, lprice)
 btc_cell()
 
-'''
-def eth_cell():
-    lprice = et1
-    e_in = sheet.cell(25,5).value
-    eresult = ((float(lprice) - float(e_in))/abs(float(e_in)))
-    ethusd_sheet = sheet.update_cell(25,8, "{:.0%}".format(eresult))
+
+def btc2_cell():
+    lprice = last_price
+    b2_in = sheet.cell(25,5).value
+    eresult = ((float(lprice) - float(b2_in))/abs(float(b2_in)))
+    btc2usd_sheet = sheet.update_cell(25,8, "{:.0%}".format(eresult))
     # Get current price
-    ethusd_cp = sheet.update_cell(25,9, lprice)
-eth_cell()
-'''
+    btc2usd_cp = sheet.update_cell(25,9, lprice)
+btc2_cell()
+
 '''
 def xlm_cell():
     lprice = xl1
