@@ -2,6 +2,7 @@
 
 import json, gspread, pprint, os, smtplib, hmac, hashlib, time, urllib.request, urllib.error, urllib.parse, cexio
 import time, websocket, requests, sched
+from cexio import *
 from twilio_creds import *
 from twilio.rest import Client
 from requests import Session, Request
@@ -91,9 +92,7 @@ print ("Open Orders:")
 print (o_orders)
 print ("\n")
 
-#Print Buy Limit Order
-#buy = myapi.buy_limit_order()
-
+##--------------------------------------------------------------- Ticker Symbols ---------------------------------------------------------------------##
 #----------BTC/USD-----------#
 btc_usd659 = "Ticker (BTC/USD)"
 last_price = (myapi.ticker()['last'])
@@ -121,8 +120,6 @@ bc1 = (myapi.ticker("BCH/USD")['last'])
 
 print ("CEX:" + " "+ G + btc_usd659, O + last_price, G + etc_usd103, O + et1, G + xlm_usd315, O + xl1, G + dash_usd886, O + da1, G + xrp_usd237, O + xr1, G + ltc_usd105, O + lt1)
 
-##############################################################################################################
-
 ##########################################################################################################>
 ### Start of the Google Sheets Api Script  | Documentation https://gspread.readthedocs.io/en/latest/
 ## https://www.techwithtim.net/tutorials/google-sheets-python-api-tutorial/  |  https://www.youtube.com/watch?v=cnPlKLEGR7E
@@ -130,126 +127,489 @@ scope = ["https://spreadsheets.google.com/feeds",'https://www.googleapis.com/aut
 creds = ServiceAccountCredentials.from_json_keyfile_name("/home/kali/Desktop/Projects/everything_python/Cryptozoom/creds.json", scope)
 client = gspread.authorize(creds)
 
-#----Google Sheets API Primer----#
+#------------------------------------------------------------------ Google Sheets API Primer --------------------------------------------------------------------------------------------#
+                                                          # How to use the sheets api will be placed here
+#----------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+                                    ## Get a specific row, column, and the value of a specific cell examples
+#----------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+#row23 = sheet.row_values(23)
+#colA = sheet.col_values(1)
 
-# How to use the sheets api will be placed here
 
-#--------------------------------#
+#----------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+                                             ## Insert the row and  the list as a row at index 4 Example:
+#----------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+#--insertRow = ["hello", 5, "red", "blue"]
+#--sheet.insert_row(insertRow, 4)
 
+#----------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+                                                                    ## Update one cell
+#----------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+#--var = sheet.cell(1,1).value
+
+
+
+########################################################################################################################################################################
+
+#-------------------------------------------------------- Open the Spreadsheet and grab all the Data  --------------------------------------------------------#
 ## Open the spreadsheet
 sheet = client.open("CryptoZoom").sheet1
-
-#---------------------------------------#
 ## Get a list of all the records
+#---------------------------------------#
 data = sheet.get_all_records()
 
-#----------------------------------------------------------------#
-## Get a specific row, column, and the value of a specific cell
-#row23 = sheet.row_values(23)
-#row24 = sheet.row_values(24)
-#row25 = sheet.row_values(25)
-#row26 = sheet.row_values(26)
-#row27 = sheet.row_values(27)
-#row28 = sheet.row_values(28)
-#row29 = sheet.row_values(29)
-#--colA = sheet.col_values(1)
+##Seeing if I can retrieve my fee##
+ob = Api(username, api_key, api_secret)
+#print (ob.balance['BTC'])
+#print (ob.get_myfee)
 
-### BTC/USD Order ID:20746142724 Function Calls to My Purchased Crypto Live Percent Changes ###
-def btc_usd1():
-    _bi = sheet.cell(24,5).value
-    _lp = last_price
-    tpercent = 0.01
-    ttpercent = 0.02
-    eresult = ((float(_lp) - float(_bi))/abs(float(_bi)))
-    if eresult >= tpercent:
-    ## Twilio ## Also update credentials to environment variable : https://www.twilio.com/docs/usage/secure-credentials
-        sid = account_sid
-        token = auth_token
-        twphone = tphone
-        pnum = myphone
-        client = Client(sid, token)
-        client.messages.create(to=pnum,from_=twphone,body="BTC/USD_1 Has reached it's target Limit!")
-'''
-    elif eresult <= ttpercent:
-        bal = myapi.balance('balance')
-        print ("\n")
-        print ("Buy Order Setup")
-        print ("-----------------")
-        print (bal)
-        print ("-----------------") 
-        print ("\n")
-    else:
-        print ("Check BTC/USD Fuction on line 134")
-'''
-btc_usd1()
-
-
-
-### Function Calls to My Purchased Crypto Live Percent Changes ETH/USD Order ID: 19513647103 ###
-def btc_usd2():
-    _ethbi = sheet.cell(25,5).value
-    _ethlp = et1
-    tpercent = 0.01
-    ttpercent = 0.02
-    result2 = ((float(_ethlp) - float(_ethbi))/abs(float(_ethbi)))
-    if result2 >= tpercent:
-        sid = account_sid
-        token = auth_token
-        twphone = tphone
-        pnum = myphone 
-
-        client = Client(sid, token)
-        client.messages.create(to=pnum,from_=twphone,body="BTC_USD2 Has reached it's target Limit!")
-    else:
-        return
-        pass
-btc_usd2()
 
 '''
-### Function Calls to My Purchased Crypto Live Percent Changes XLM/USD Order ID: 19694465315 ###
-def percentchange3():
-    _xlmlp = xl1
-    _xlmbi = sheet.cell(26,5).value
-    num3 = 0.2
-    xresult = ((float(_xlmlp) - float(_xlmbi))/abs(float(_xlmbi)))
-    if xresult >= num3:
-        sid = account_sid
-        token = auth_token
-        twphone = tphone
-        pnum = myphone 
+#----------BTC/USD-----------#
+btc_usd659 = "Ticker (BTC/USD)"
+last_price = (myapi.ticker()['last'])
+#----------ETH/USD-----------#
+etc_usd103 = "Ticker (ETH/USD)"
+et1 = (myapi.ticker("ETH/USD")['last'])
+#----------XLM/USD-----------#
+xlm_usd315 = "Ticker (XLM/USD)"
+xl1 = (myapi.ticker("XLM/USD")['last'])
+#----------DASH/USD-----------#
+dash_usd886 = "Ticker (DASH/USD)"
+da1 = (myapi.ticker("DASH/USD")['last'])
+#----------XRP/USD-----------#
+xrp_usd237 = "Ticker (XRP/USD)"
+xr1 = (myapi.ticker("XRP/USD")['last'])
+#----------BAT/USD-----------#
+bat_usd105 = "Ticker (BAT/USD)"
+bat = (myapi.ticker("BAT/USD")['last'])
+#----------LTC/USD-----------#
+ltc_usd105 = "Ticker (LTC/USD)"
+lt1 = (myapi.ticker("LTC/USD")['last'])
+#----------BCH/USD-----------#
+bch_usd105 = "Ticker (BCH/USD)"
+bc1 = (myapi.ticker("BCH/USD")['last'])
+'''
 
-        client = Client(sid, token)
-        client.messages.create(to=pnum,from_=twphone,body="XLM/USD Has reached the target Limit!")
-    else:
-        return
-        pass
-percentchange3()
-'''
-'''
-### Function Calls to My Purchased Crypto Live Percent Changes DASH/USD Order ID: 19694671886 ###
-def percentchange4():
-    _dashlp = da1
-    _dashbi = sheet.cell(27,5).value
-    num4 = 0.03
-    dresult = ((float(_dashlp) - float(_dashbi))/abs(float(_dashbi)))
-    if dresult >= num4:
-        sid = account_sid
-        token = auth_token
-        twphone = tphone
-        pnum = myphone 
+##------------------------------------------------------------- BTC_USD SECTION Live Crypto Percent Changes ------------------------------------------------------##
 
-        client = Client(sid, token)
-        client.messages.create(to=pnum,from_=twphone,body="DASH/USD Has reached the target Limit!")
-    else:
-        return
-        pass
-percentchange4()
-'''
+### BTC/USD Function Calls to My Purchased Crypto Live Percent Changes ###
+buyin = float(sheet.cell(24,5).value)
+data24 = 0
+if buyin > data24:
+    def btc_usd1():
+        _bi = sheet.cell(24,5).value
+        _lp = last_price
+        tpercent = 0.50
+        goalpercent = 0.02
+        ttpercent = 0.02
+        eresult = ((float(_lp) - float(_bi))/abs(float(_bi)))
+        btcusd1_sheet = sheet.update_cell(24,8, "{:.0%}".format(eresult))
+        #Get Current Price
+        btcusd1_cp = sheet.update_cell(24,9, _lp)
+        if eresult >= tpercent:
+        ## Twilio ## Also update credentials to environment variable : https://www.twilio.com/docs/usage/secure-credentials
+            sid = account_sid
+            token = auth_token
+            twphone = tphone
+            pnum = myphone
+            client = Client(sid, token)
+            client.messages.create(to=pnum,from_=twphone,body="BTC/USD_1 Has reached it's target Limit!")
+#        if eresult >= goalpercent:
+            ## Sell Limit Order Call
+#            sell_limit_order(.048,37993,btc/usd)
+#            ## Twilio ## Order Executed Update
+#            sid = account_sid
+#            token = auth_token
+#            twphone = tphone
+#            pnum = myphone
+#            client = Client(sid, token)
+#            client.messages.create(to=pnum,from_=twphone,body="BTC/USD_1 Sell Order Executed!")
+        else:
+            pass
+    '''
+        elif eresult <= ttpercent:
+            bal = myapi.balance('balance')
+            print ("\n")
+            print ("Buy Order Setup")
+            print ("-----------------")
+            print (bal)
+            print ("-----------------") 
+            print ("\n")
+        else:
+            print ("Check BTC/USD Fuction on line 134")
+    '''
+    btc_usd1()
+
+else:
+    pass
+
+
+
+### BTC_USD2 Function Calls to My Purchased Crypto Live Percent Changes ###
+buyin = float(sheet.cell(25,5).value)
+data25 = 0
+if buyin > data25:
+    def btc_usd2():
+        _btcusd2bi = sheet.cell(25,5).value
+        _btcusd2lp = last_price 
+        tpercent = 0.50
+        ttpercent = 0.02
+        eresult = ((float(_btcusd2lp) - float(_btcusd2bi))/abs(float(_btcusd2bi)))
+        btcusd2_sheet = sheet.update_cell(25,8, "{:.0%}".format(eresult))
+        #Get Current Price
+        btcusd2_cp = sheet.update_cell(25,9, _btcusd2lp)
+        result2 = ((float(_btcusd2lp) - float(_btcusd2bi))/abs(float(_btcusd2bi)))
+        if result2 >= tpercent:
+            sid = account_sid
+            token = auth_token
+            twphone = tphone
+            pnum = myphone 
+
+            client = Client(sid, token)
+            client.messages.create(to=pnum,from_=twphone,body="BTC_USD2 Has reached it's target Limit!")
+        else:
+            return
+            pass
+    btc_usd2()
+
+else:
+    pass
+
+
+### BTC_USD3 Function Calls to My Purchased Crypto Live Percent Changes ###
+buyin = float(sheet.cell(26,5).value)
+data26 = 0
+if buyin > data26:
+    def btc_usd3():
+        _btcusd3bi = sheet.cell(26,5).value
+        _btcusd3lp = last_price 
+        tpercent = 0.50
+        ttpercent = 0.02
+        eresult = ((float(_btcusd3lp) - float(_btcusd3bi))/abs(float(_btcusd3bi)))
+        btcusd3_sheet = sheet.update_cell(26,8, "{:.0%}".format(eresult))
+        #Get Current Price
+        btcusd3_cp = sheet.update_cell(26,9, _btcusd3lp)
+        result2 = ((float(_btcusd3lp) - float(_btcusd3bi))/abs(float(_btcusd3bi)))
+        if result2 >= tpercent:
+            sid = account_sid
+            token = auth_token
+            twphone = tphone
+            pnum = myphone 
+
+            client = Client(sid, token)
+            client.messages.create(to=pnum,from_=twphone,body="BTC_USD2 Has reached it's target Limit!")
+        else:
+            return
+            pass
+    btc_usd3()
+
+else:
+    pass
+
+##------------------------------------------------------------------- ETH_USD SECTION Live Crypto Percent Changes ----------------------------------------------------------------------##
+### ETH_USD1 Function Calls to My Purchased Crypto Live Percent Changes ###
+buyin = float(sheet.cell(28,5).value)
+data28 = 0
+if buyin > data28:
+    def eth_usd1():
+        _ethusd1bi = sheet.cell(28,5).value
+        _ethusd1lp = et1 
+        tpercent = 0.50
+        ttpercent = 0.02
+        eresult = ((float(_ethusd1lp) - float(_ethusd1bi))/abs(float(_ethusd1bi)))
+        ethusd1_sheet = sheet.update_cell(28,8, "{:.0%}".format(eresult))
+        #Get Current Price
+        ethusd1_cp = sheet.update_cell(28,9, _ethusd1lp)
+        result2 = ((float(_ethusd1lp) - float(_ethusd1bi))/abs(float(_ethusd1bi)))
+        if result2 >= tpercent:
+            sid = account_sid
+            token = auth_token
+            twphone = tphone
+            pnum = myphone 
+
+            client = Client(sid, token)
+            client.messages.create(to=pnum,from_=twphone,body="ETH_USD1 Has reached it's target Limit!")
+        else:
+            return
+            pass
+    eth_usd1()
+
+else:
+    pass
+
+### ETH_USD2 Function Calls to My Purchased Crypto Live Percent Changes ###
+buyin = float(sheet.cell(29,5).value)
+data29 = 0
+if buyin > data29:
+    def eth_usd2():
+        _ethusd2bi = sheet.cell(29,5).value
+        _ethusd2lp = et1 
+        tpercent = 0.50
+        ttpercent = 0.02
+        eresult = ((float(_ethusd2lp) - float(_ethusd2bi))/abs(float(_ethusd2bi)))
+        ethusd2_sheet = sheet.update_cell(29,8, "{:.0%}".format(eresult))
+        #Get Current Price
+        ethusd2_cp = sheet.update_cell(29,9, _ethusd2lp)
+        result2 = ((float(_ethusd2lp) - float(_ethusd2bi))/abs(float(_ethusd2bi)))
+        if result2 >= tpercent:
+            sid = account_sid
+            token = auth_token
+            twphone = tphone
+            pnum = myphone 
+
+            client = Client(sid, token)
+            client.messages.create(to=pnum,from_=twphone,body="ETH_USD2 Has reached it's target Limit!")
+        else:
+            return
+            pass
+    eth_usd2()
+
+else:
+    pass
+
+
+### ETH_USD3 Function Calls to My Purchased Crypto Live Percent Changes ###
+buyin = float(sheet.cell(30,5).value)
+data30 = 0
+if buyin > data30:
+    def eth_usd3():
+        _ethusd3bi = sheet.cell(30,5).value
+        _ethusd3lp = et1
+        tpercent = 0.50
+        ttpercent = 0.02
+        eresult = ((float(_ethusd3lp) - float(_ethusd3bi))/abs(float(_ethusd3bi)))
+        ethusd3_sheet = sheet.update_cell(30,8, "{:.0%}".format(eresult))
+        #Get Current Price
+        ethusd3_cp = sheet.update_cell(30,9, _ethusd3lp)
+        result2 = ((float(_ethusd3lp) - float(_ethusd3bi))/abs(float(_ethusd3bi)))
+        if result2 >= tpercent:
+            sid = account_sid
+            token = auth_token
+            twphone = tphone
+            pnum = myphone 
+
+            client = Client(sid, token)
+            client.messages.create(to=pnum,from_=twphone,body="ETH_USD3 Has reached it's target Limit!")
+        else:
+            return
+            pass
+    eth_usd3()
+
+else:
+    pass
+
+##------------------------------------------------------------------- XLM_USD SECTION Live Crypto Percent Changes ----------------------------------------------------------------------##
+
+### XLM_USD1 Function Calls to My Purchased Crypto Live Percent Changes ###
+buyin = float(sheet.cell(32,5).value)
+data32 = 0
+if buyin > data32:
+    def xlm_usd1():
+        _xlmusd1bi = sheet.cell(32,5).value
+        _xlmusd1lp = xl1 
+        tpercent = 0.50
+        ttpercent = 0.02
+        eresult = ((float(_xlmusd1lp) - float(_xlmusd1bi))/abs(float(_xlmusd1bi)))
+        xlmusd1_sheet = sheet.update_cell(32,8, "{:.0%}".format(eresult))
+        #Get Current Price
+        xlmusd1_cp = sheet.update_cell(32,9, _xlmusd1lp)
+        result2 = ((float(_xlmusd1lp) - float(_xlmusd1bi))/abs(float(_xlmusd1bi)))
+        if result2 >= tpercent:
+            sid = account_sid
+            token = auth_token
+            twphone = tphone
+            pnum = myphone 
+
+            client = Client(sid, token)
+            client.messages.create(to=pnum,from_=twphone,body="XLM_USD1 Has reached it's target Limit!")
+        else:
+            return
+            pass
+    xlm_usd1()
+
+else:
+    pass
+
+### XLM_USD2 Function Calls to My Purchased Crypto Live Percent Changes ###
+buyin = float(sheet.cell(33,5).value)
+data33 = 0
+if buyin > data33:
+    def xlm_usd2():
+        _xlmusd2bi = sheet.cell(33,5).value
+        _xlmusd2lp = xl1 
+        tpercent = 0.50
+        ttpercent = 0.02
+        eresult = ((float(_xlmusd2lp) - float(_xlmusd2bi))/abs(float(_xlmusd2bi)))
+        xlmusd2_sheet = sheet.update_cell(33,8, "{:.0%}".format(eresult))
+        #Get Current Price
+        xlmusd2_cp = sheet.update_cell(33,9, _xlmusd2lp)
+        result2 = ((float(_xlmusd2lp) - float(_xlmusd2bi))/abs(float(_xlmusd2bi)))
+        if result2 >= tpercent:
+            sid = account_sid
+            token = auth_token
+            twphone = tphone
+            pnum = myphone 
+
+            client = Client(sid, token)
+            client.messages.create(to=pnum,from_=twphone,body="XLM_USD2 Has reached it's target Limit!")
+        else:
+            return
+            pass
+    xlm_usd2()
+
+else:
+    pass
+
+### XLM_USD3 Function Calls to My Purchased Crypto Live Percent Changes ###
+buyin = float(sheet.cell(34,5).value)
+data34 = 0
+if buyin > data34:
+    def xlm_usd3():
+        _xlmusd3bi = sheet.cell(34,5).value
+        _xlmusd3lp = xl1 
+        tpercent = 0.50
+        ttpercent = 0.02
+        eresult = ((float(_xlmusd3lp) - float(_xlmusd3bi))/abs(float(_xlmusd3bi)))
+        xlmusd3_sheet = sheet.update_cell(34,8, "{:.0%}".format(eresult))
+        #Get Current Price
+        xlmusd2_cp = sheet.update_cell(33,9, _xlmusd2lp)
+        result2 = ((float(_xlmusd3lp) - float(_xlmusd3bi))/abs(float(_xlmusd3bi)))
+        if result2 >= tpercent:
+            sid = account_sid
+            token = auth_token
+            twphone = tphone
+            pnum = myphone 
+
+            client = Client(sid, token)
+            client.messages.create(to=pnum,from_=twphone,body="XLM_USD3 Has reached it's target Limit!")
+        else:
+            return
+            pass
+    xlm_usd3()
+
+else:
+    pass
+##------------------------------------------------------------------ DASH_USD SECTION Live Crypto Percent Changes ----------------------------------------------------------------------##
+### DASH_USD1 Function Calls to My Purchased Crypto Live Percent Changes ###
+buyin = float(sheet.cell(36,5).value)
+data36 = 0
+if buyin > data36:
+    def dash_usd1():
+        _dashusd1bi = sheet.cell(36,5).value
+        _dashusd1lp = da1 
+        tpercent = 0.50
+        ttpercent = 0.02
+        eresult = ((float(_dashusd1lp) - float(_dashusd1bi))/abs(float(_dashusd1bi)))
+        dashusd1_sheet = sheet.update_cell(36,8, "{:.0%}".format(eresult))
+        #Get Current Price
+        dashusd1_cp = sheet.update_cell(36,9, _dashusd1lp)
+        result2 = ((float(_dashusd1lp) - float(_dashusd1bi))/abs(float(_dashusd1bi)))
+        if result2 >= tpercent:
+            sid = account_sid
+            token = auth_token
+            twphone = tphone
+            pnum = myphone 
+
+            client = Client(sid, token)
+            client.messages.create(to=pnum,from_=twphone,body="DASH_USD1 Has reached it's target Limit!")
+        else:
+            return
+            pass
+    dash_usd1()
+
+else:
+    pass
+
+### DASH_USD2 Function Calls to My Purchased Crypto Live Percent Changes ###
+buyin = float(sheet.cell(37,5).value)
+data37 = 0
+if buyin > data37:
+    def dash_usd2():
+        _dashusd2bi = sheet.cell(37,5).value
+        _dashusd2lp = da1
+        tpercent = 0.50
+        ttpercent = 0.02
+        eresult = ((float(_dashusd2lp) - float(_dashusd2bi))/abs(float(_dashusd2bi)))
+        dashusd2_sheet = sheet.update_cell(37,8, "{:.0%}".format(eresult))
+        #Get Current Price
+        dashusd1_cp = sheet.update_cell(37,9, _dashusd2lp)
+        result2 = ((float(_dashusd2lp) - float(_dashusd2bi))/abs(float(_dashusd2bi)))
+        if result2 >= tpercent:
+            sid = account_sid
+            token = auth_token
+            twphone = tphone
+            pnum = myphone 
+
+            client = Client(sid, token)
+            client.messages.create(to=pnum,from_=twphone,body="DASH_USD2 Has reached it's target Limit!")
+        else:
+            return
+            pass
+    dash_usd2()
+
+else:
+    pass
+
+### DASH_USD3 Function Calls to My Purchased Crypto Live Percent Changes ###
+buyin = float(sheet.cell(38,5).value)
+data38 = 0
+if buyin > data38:
+    def dash_usd3():
+        _dashusd3bi = sheet.cell(38,5).value
+        _dashusd3lp = da1
+        tpercent = 0.50
+        ttpercent = 0.02
+        eresult = ((float(_dashusd3lp) - float(_dashusd3bi))/abs(float(_dashusd3bi)))
+        dashusd3_sheet = sheet.update_cell(38,8, "{:.0%}".format(eresult))
+        #Get Current Price
+        dashusd3_cp = sheet.update_cell(38,9, _dashusd3lp)
+        result2 = ((float(_dashusd3lp) - float(_dashusd3bi))/abs(float(_dashusd3bi)))
+        if result2 >= tpercent:
+            sid = account_sid
+            token = auth_token
+            twphone = tphone
+            pnum = myphone 
+
+            client = Client(sid, token)
+            client.messages.create(to=pnum,from_=twphone,body="DASH_USD3 Has reached it's target Limit!")
+        else:
+            return
+            pass
+    dash_usd3()
+
+else:
+    pass
+
+##------------------------------------------------------------------- XRP_USD SECTION Live Crypto Percent Changes ----------------------------------------------------------------------##
+#/#/#/ Still need to update this section
 
 ### Function Calls to My Purchased Crypto Live Percent Changes XRP/USD Order ID:19694843237 ###
 def xrp_usd1():
     _xrp1lp = xr1
     _xrp1bi = sheet.cell(40,5).value
+    tpercent = 0.50
+    goalpercent = 0.50
+    ttpercent = 0.02
+    xr1result = ((float(_xrp1lp) - float(_xrp1bi))/abs(float(_xrp1bi)))
+    if xr1result >= tpercent:
+        sid = account_sid
+        token = auth_token
+        twphone = tphone
+        pnum = myphone 
+        client = Client(sid, token)
+        client.messages.create(to=pnum,from_=twphone,body="XRP/USD 1 Has reached it's target Limit!")
+    if xr1result >= goalpercent:
+         sell_limit_order(617,0.31,xrp/usd)
+    else:
+        return
+        pass
+xrp_usd1()
+
+### XRP/USD 2 Function Calls to My Purchased Crypto Live Percent Changes ###
+def xrp_usd2():
+    _xrp1lp = xr1
+    _xrp1bi = sheet.cell(41,5).value
     tpercent = 0.50
     ttpercent = 0.02
     xr1result = ((float(_xrp1lp) - float(_xrp1bi))/abs(float(_xrp1bi)))
@@ -259,60 +619,317 @@ def xrp_usd1():
         twphone = tphone
         pnum = myphone 
         client = Client(sid, token)
-        client.messages.create(to=pnum,from_=twphone,body="XRP/USD Has reached the target Limit!")
+        client.messages.create(to=pnum,from_=twphone,body="XRP/USD 2 Has reached it's target Limit!")
     else:
         return
         pass
-xrp_usd1()
+xrp_usd2()
+
+### XRP/USD 3 Function Calls to My Purchased Crypto Live Percent Changes ###
+sheet42 = sheet.cell(42,5).value
+data42 = 0
+if float(sheet42) > data42:
+    def xrp_usd3():
+        _xrp3lp = xr1
+        _xrp3bi = sheet.cell(42,5).value
+        tpercent = 0.05
+        ttpercent = 0.02
+        xr3result = ((float(_xrp3lp) - float(_xrp3bi))/abs(float(_xrp3bi)))
+        if xr3result >= tpercent:
+            sid = account_sid
+            token = auth_token
+            twphone = tphone
+            pnum = myphone 
+            client = Client(sid, token)
+            client.messages.create(to=pnum,from_=twphone,body="XRP/USD 3 Has reached it's target Limit!")
+        else:
+            return
+            pass
+    xrp_usd3()
+else:
+    pass
+
+##------------------------------------------------------------------- BAT_USD SECTION Live Crypto Percent Changes ----------------------------------------------------------------------##
+
+### BAT_USD1 Function Calls to My Purchased Crypto Live Percent Changes ###
+buyin = float(sheet.cell(44,5).value)
+data44 = 0
+if buyin > data44:
+    def bat_usd1():
+        _batusd1bi = sheet.cell(44,5).value
+        _batusd1lp = bat 
+        tpercent = 0.50
+        ttpercent = 0.02
+        eresult = ((float(_batusd1lp) - float(_batusd1bi))/abs(float(_batusd1bi)))
+        batusd1_sheet = sheet.update_cell(44,8, "{:.0%}".format(eresult))
+        #Get Current Price
+        batusd1_cp = sheet.update_cell(44,9, _batusd1lp)
+        result2 = ((float(_batusd1lp) - float(_batusd1bi))/abs(float(_batusd1bi)))
+        if result2 >= tpercent:
+            sid = account_sid
+            token = auth_token
+            twphone = tphone
+            pnum = myphone 
+
+            client = Client(sid, token)
+            client.messages.create(to=pnum,from_=twphone,body="BAT_USD1 Has reached it's target Limit!")
+        else:
+            return
+            pass
+    bat_usd1()
+
+else:
+    pass
+
+### BAT_USD2 Function Calls to My Purchased Crypto Live Percent Changes ###
+buyin = float(sheet.cell(45,5).value)
+data45 = 0
+if buyin > data45:
+    def bat_usd2():
+        _batusd2bi = sheet.cell(45,5).value
+        _batusd2lp = bat 
+        tpercent = 0.50
+        ttpercent = 0.02
+        eresult = ((float(_batusd2lp) - float(_batusd2bi))/abs(float(_batusd2bi)))
+        batusd2_sheet = sheet.update_cell(45,8, "{:.0%}".format(eresult))
+        #Get Current Price
+        batusd2_cp = sheet.update_cell(45,9, _batusd2lp)
+        result2 = ((float(_batusd2lp) - float(_batusd2bi))/abs(float(_batusd2bi)))
+        if result2 >= tpercent:
+            sid = account_sid
+            token = auth_token
+            twphone = tphone
+            pnum = myphone 
+
+            client = Client(sid, token)
+            client.messages.create(to=pnum,from_=twphone,body="BAT_USD2 Has reached it's target Limit!")
+        else:
+            return
+            pass
+    bat_usd2()
+
+else:
+    pass
+
+### BAT_USD3 Function Calls to My Purchased Crypto Live Percent Changes ###
+buyin = float(sheet.cell(46,5).value)
+data46 = 0
+if buyin > data46:
+    def bat_usd3():
+        _batusd3bi = sheet.cell(46,5).value
+        _batusd3lp = bat 
+        tpercent = 0.50
+        ttpercent = 0.02
+        eresult = ((float(_batusd3lp) - float(_batusd3bi))/abs(float(_batusd3bi)))
+        batusd3_sheet = sheet.update_cell(46,8, "{:.0%}".format(eresult))
+        #Get Current Price
+        batusd3_cp = sheet.update_cell(46,9, _batusd3lp)
+        result2 = ((float(_batusd3lp) - float(_batusd3bi))/abs(float(_batusd3bi)))
+        if result2 >= tpercent:
+            sid = account_sid
+            token = auth_token
+            twphone = tphone
+            pnum = myphone 
+
+            client = Client(sid, token)
+            client.messages.create(to=pnum,from_=twphone,body="BAT_USD3 Has reached it's target Limit!")
+        else:
+            return
+            pass
+    bat_usd3()
+
+else:
+    pass
+
+##------------------------------------------------------------------- BCH_USD SECTION Live Crypto Percent Changes ----------------------------------------------------------------------##
+
+### BCH_USD1 Function Calls to My Purchased Crypto Live Percent Changes ###
+buyin = float(sheet.cell(48,5).value)
+data48 = 0
+if buyin > data48:
+    def bch_usd1():
+        _bchusd1bi = sheet.cell(48,5).value
+        _bchusd1lp = bc1
+        tpercent = 0.50
+        ttpercent = 0.02
+        eresult = ((float(_bchusd1lp) - float(_bchusd1bi))/abs(float(_bchusd1bi)))
+        bchusd1_sheet = sheet.update_cell(48,8, "{:.0%}".format(eresult))
+        #Get Current Price
+        bchusd1_cp = sheet.update_cell(48,9, _bchusd1lp)
+        result2 = ((float(_bchusd1lp) - float(_bchusd1bi))/abs(float(_bchusd1bi)))
+        if result2 >= tpercent:
+            sid = account_sid
+            token = auth_token
+            twphone = tphone
+            pnum = myphone 
+
+            client = Client(sid, token)
+            client.messages.create(to=pnum,from_=twphone,body="BCH_USD1 Has reached it's target Limit!")
+        else:
+            return
+            pass
+    bch_usd1()
+
+else:
+    pass
+
+### BCH_USD2 Function Calls to My Purchased Crypto Live Percent Changes ###
+buyin = float(sheet.cell(49,5).value)
+data49 = 0
+if buyin > data49:
+    def bch_usd2():
+        _bchusd2bi = sheet.cell(49,5).value
+        _bchusd2lp = bc1 
+        tpercent = 0.50
+        ttpercent = 0.02
+        eresult = ((float(_bchusd2lp) - float(_bchusd2bi))/abs(float(_bchusd2bi)))
+        bchusd2_sheet = sheet.update_cell(49,8, "{:.0%}".format(eresult))
+        #Get Current Price
+        bchusd1_cp = sheet.update_cell(49,9, _bchusd2lp)
+        result2 = ((float(_bchusd2lp) - float(_bchusd2bi))/abs(float(_bchusd2bi)))
+        if result2 >= tpercent:
+            sid = account_sid
+            token = auth_token
+            twphone = tphone
+            pnum = myphone 
+
+            client = Client(sid, token)
+            client.messages.create(to=pnum,from_=twphone,body="BCH_USD2 Has reached it's target Limit!")
+        else:
+            return
+            pass
+    bch_usd2()
+
+else:
+    pass
+
+### BCH_USD3 Function Calls to My Purchased Crypto Live Percent Changes ###
+buyin = float(sheet.cell(50,5).value)
+data50 = 0
+if buyin > data50:
+    def bch_usd3():
+        _bchusd3bi = sheet.cell(50,5).value
+        _bchusd3lp =bc1 
+        tpercent = 0.50
+        ttpercent = 0.02
+        eresult = ((float(_bchusd3lp) - float(_bchusd3bi))/abs(float(_bchusd3bi)))
+        bchusd3_sheet = sheet.update_cell(50,8, "{:.0%}".format(eresult))
+        #Get Current Price
+        bchusd3_cp = sheet.update_cell(50,9, _bchusd3lp)
+        result2 = ((float(_bchusd3lp) - float(_bchusd3bi))/abs(float(_bchusd3bi)))
+        if result2 >= tpercent:
+            sid = account_sid
+            token = auth_token
+            twphone = tphone
+            pnum = myphone 
+
+            client = Client(sid, token)
+            client.messages.create(to=pnum,from_=twphone,body="BCH_USD3 Has reached it's target Limit!")
+        else:
+            return
+            pass
+    bch_usd3()
+
+else:
+    pass
+
+##------------------------------------------------------------------- LTC_USD SECTION Live Crypto Percent Changes ----------------------------------------------------------------------##
+
+### LTC_USD1 Function Calls to My Purchased Crypto Live Percent Changes ###
+buyin = float(sheet.cell(52,5).value)
+data52 = 0
+if buyin > data52:
+    def ltc_usd1():
+        _ltcusd1bi = sheet.cell(52,5).value
+        _ltcusd1lp = lt1 
+        tpercent = 0.50
+        ttpercent = 0.02
+        eresult = ((float(_ltcusd1lp) - float(_ltcusd1bi))/abs(float(_ltcusd1bi)))
+        ltcusd1_sheet = sheet.update_cell(52,8, "{:.0%}".format(eresult))
+        #Get Current Price
+        ltcusd1_cp = sheet.update_cell(52,9, _ltcusd1lp)
+        result2 = ((float(_ltcusd1lp) - float(_ltcusd1bi))/abs(float(_ltcusd1bi)))
+        if result2 >= tpercent:
+            sid = account_sid
+            token = auth_token
+            twphone = tphone
+            pnum = myphone 
+
+            client = Client(sid, token)
+            client.messages.create(to=pnum,from_=twphone,body="LTC_USD Has reached it's target Limit!")
+        else:
+            return
+            pass
+    ltc_usd1()
+
+else:
+    pass
+
+### LTC_USD2 Function Calls to My Purchased Crypto Live Percent Changes ###
+buyin = float(sheet.cell(53,5).value)
+data53 = 0
+if buyin > data53:
+    def ltc_usd2():
+        _ltcusd2bi = sheet.cell(53,5).value
+        _ltcusd2lp = lt1 
+        tpercent = 0.50
+        ttpercent = 0.02
+        eresult = ((float(_ltcusd2lp) - float(_ltcusd2bi))/abs(float(_ltcusd2bi)))
+        ltcusd2_sheet = sheet.update_cell(53,8, "{:.0%}".format(eresult))
+        #Get Current Price
+        ltcusd2_cp = sheet.update_cell(53,9, _ltcusd2lp)
+        result2 = ((float(_ltcusd2lp) - float(_ltcusd2bi))/abs(float(_ltcusd2bi)))
+        if result2 >= tpercent:
+            sid = account_sid
+            token = auth_token
+            twphone = tphone
+            pnum = myphone 
+
+            client = Client(sid, token)
+            client.messages.create(to=pnum,from_=twphone,body="LTC_USD2 Has reached it's target Limit!")
+        else:
+            return
+            pass
+    ltc_usd2()
+
+else:
+    pass
+
+### LTC_USD3 Function Calls to My Purchased Crypto Live Percent Changes ###
+buyin = float(sheet.cell(54,5).value)
+data54 = 0
+if buyin > data54:
+    def ltc_usd3():
+        _ltcusd3bi = sheet.cell(54,5).value
+        _ltcusd3lp = lt1
+        tpercent = 0.50
+        ttpercent = 0.02
+        eresult = ((float(_ltcusd3lp) - float(_ltcusd3bi))/abs(float(_ltcusd3bi)))
+        ltcusd3_sheet = sheet.update_cell(54,8, "{:.0%}".format(eresult))
+        #Get Current Price
+        ltcusd3_cp = sheet.update_cell(54,9, _ltcusd3lp)
+        result2 = ((float(_ltcusd3lp) - float(_ltcusd3bi))/abs(float(_ltcusd3bi)))
+        if result2 >= tpercent:
+            sid = account_sid
+            token = auth_token
+            twphone = tphone
+            pnum = myphone 
+
+            client = Client(sid, token)
+            client.messages.create(to=pnum,from_=twphone,body="LTC_USD3 Has reached it's target Limit!")
+        else:
+            return
+            pass
+    ltc_usd3()
+
+else:
+    pass
 
 
-#----------------------------------------------------#
-## Insert the row and  the list as a row at index 4
-#--insertRow = ["hello", 5, "red", "blue"]
-#--sheet.insert_row(insertRow, 4)
 
-#-----------------------------------#
-## Update one cell
+#----------------------------- Show Actual Percent Change in Cell and Most current price in Another-------------------------------------------#
 
-def btc_cell():
-    lprice = last_price
-    b_in = sheet.cell(24,5).value
-    result = ((float(lprice) - float(b_in))/abs(float(b_in)))
-    btcusd_sheet = sheet.update_cell(24,8, "{:.0%}".format(result))
-   # Get current price
-    btcusd_cp = sheet.update_cell(24,9, lprice)
-btc_cell()
-
-
-def btc2_cell():
-    lprice = last_price
-    b2_in = sheet.cell(25,5).value
-    eresult = ((float(lprice) - float(b2_in))/abs(float(b2_in)))
-    btc2usd_sheet = sheet.update_cell(25,8, "{:.0%}".format(eresult))
-    # Get current price
-    btc2usd_cp = sheet.update_cell(25,9, lprice)
-btc2_cell()
-
-'''
-def xlm_cell():
-    lprice = xl1
-    x_in = sheet.cell(26,5).value
-    xlresult = ((float(lprice) - float(x_in))/abs(float(x_in)))
-    xlmusd_sheet = sheet.update_cell(26,8, "{:.0%}".format(xlresult))
-    # Get current price
-    xlmusd_cp = sheet.update_cell(26,9, lprice)
-xlm_cell()
-'''
-'''
-def dash_cell():
-    lprice = da1
-    d_in = sheet.cell(27,5).value
-    dashresult = ((float(lprice) - float(d_in))/abs(float(d_in)))
-    dashusd_sheet = sheet.update_cell(27,8, "{:.0%}".format(dashresult))
-    # Get current price
-    dashusd_cp = sheet.update_cell(27,9, lprice)
-dash_cell()
-'''
+#-------------------------------XRP------------------------------------------#
 
 def xrp1_cell():
     # Get Buyin Price
@@ -360,86 +977,26 @@ def xrp1_cell():
         print ("Something went wrong...")
 xrp1_cell()
 
-'''
-def xrp2_cell():
+
+def xrp2usd_cell():
     lprice = xr1
-    xr2_in = sheet.cell(29,5).value
+    xr2_in = sheet.cell(41,5).value
     xrp2result = ((float(lprice) - float(xr2_in))/abs(float(xr2_in)))
-    xrp2usd_sheet = sheet.update_cell(29,8, "{:.0%}".format(xrp2result))
+    xrp2usd_sheet = sheet.update_cell(41,8, "{:.0%}".format(xrp2result))
     # Get current price
-    xrp2usd_cp = sheet.update_cell(29,9, lprice)
-xrp2_cell()
-'''
-'''
+    xrp2usd_cp = sheet.update_cell(41,9, lprice)
+xrp2usd_cell()
+
+
 def xrp3_cell():
     lprice = xr1
-    xr3_in = sheet.cell(34,5).value
+    xr3_in = sheet.cell(42,5).value
     xrp3result = ((float(lprice) - float(xr3_in))/abs(float(xr3_in)))
-    xrp3usd_sheet = sheet.update_cell(34,8, "{:.0%}".format(xrp3result))
+    xrp3usd_sheet = sheet.update_cell(42,8, "{:.0%}".format(xrp3result))
     # Get current price
-    xrp3usd_cp = sheet.update_cell(34,9, lprice)
+    xrp3usd_cp = sheet.update_cell(42,9, lprice)
 xrp3_cell()
-'''
-'''
-def xrp4_cell():
-    lprice = xr1
-    xr4_in = sheet.cell(35,5).value
-    xrp4result = ((float(lprice) - float(xr4_in))/abs(float(xr4_in)))
-    xrp4usd_sheet = sheet.update_cell(35,8, "{:.0%}".format(xrp4result))
-    # Get current price
-    xrp4usd_cp = sheet.update_cell(35,9, lprice)
-xrp4_cell()
-'''
-'''
-def bat_cell():
-    lprice = bat
-    b_in = sheet.cell(30,5).value
-    result = ((float(lprice) - float(b_in))/abs(float(b_in)))
-    batusd_sheet = sheet.update_cell(30,8, "{:.0%}".format(result))
-   # Get current price
-    batusd_cp = sheet.update_cell(30,9, lprice)
-bat_cell()
-'''
-'''
-def bat2_cell():
-    lprice = bat
-    b2_in = sheet.cell(31,5).value
-    result = ((float(lprice) - float(b2_in))/abs(float(b2_in)))
-    bat2usd_sheet = sheet.update_cell(31,8, "{:.0%}".format(result))
-   # Get current price
-    bat2usd_cp = sheet.update_cell(31,9, lprice)
-bat2_cell()
-'''
-'''
-def ltc_cell():
-    lprice = lt1
-    lt_in = sheet.cell(32,5).value
-    result = ((float(lprice) - float(lt_in))/abs(float(lt_in)))
-    ltcusd_sheet = sheet.update_cell(32,8, "{:.0%}".format(result))
-   # Get current price
-    ltcusd_cp = sheet.update_cell(32,9, lprice)
-ltc_cell()
-'''
-'''
-def bch_cell():
-    lprice = bc1
-    bc_in = sheet.cell(33,5).value
-    result = ((float(lprice) - float(bc_in))/abs(float(bc_in)))
-    bchusd_sheet = sheet.update_cell(33,8, "{:.0%}".format(result))
-   # Get current price
-    bchusd_cp = sheet.update_cell(33,9, lprice)
-bch_cell()
-'''
-'''
-def ltc_cell2():
-    lprice = lt1
-    lt_in = sheet.cell(36,5).value
-    result = ((float(lprice) - float(lt_in))/abs(float(lt_in)))
-    ltcusd_sheet = sheet.update_cell(36,8, "{:.0%}".format(result))
-   # Get current price
-    ltcusd_cp = sheet.update_cell(36,9, lprice)
-ltc_cell2()
-'''
+
 #---------------------------------------#
 ## Dewayne's CEX Crypto Exchange Chart ##
 '''
@@ -462,9 +1019,11 @@ class color:
    END = '\033[0m'
 
 '''
+##------------------------------ Order History Section ----------------------------------------------------##
+## Links: How to change cell color in google sheets: https://www.maketecheasier.com/change-cell-color-google-sheet/
 print ('ORDER HISTORY')
-print ('USD PAIRS |    DATE    |  ORDER ID   |  AMOUNT  |  BUYIN PRICE  |  FEE  |  TOTAL  | % CHANGE')
-print (' BTC/USD  | 12/21/2020 | 20841191289 |  0.0221  |   23121.9     |  1.28 |  512.27 |   1%')
+print (color.UNDERLINE + 'USD PAIRS |    DATE    |  ORDER ID   |  AMOUNT  |  BUYIN PRICE  |  FEE  |  TOTAL  | % CHANGE')
+print (color.UNDERLINE + 'BTC/USD  | 12/21/2020 | 20841191289 |  0.0221  |   23121.9     |  1.28 |  512.27 |   1%')
 #---------------------------------------#
 
 ## Get the number of rows in the sheet
