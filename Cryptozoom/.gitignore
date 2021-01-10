@@ -1,4 +1,14 @@
 cex_creds.env
+<<<<<<< HEAD
 twilio_creds.py
 gmail_creds.py
 creds.json
+=======
+gmail_creds.py
+twilio_creds.py
+creds.json
+__pycache__
+cryptozoom_iter
+cryptozoom
+.env
+>>>>>>> 880380e1583b78b28d7a510d74a62ffd6d5580fd
