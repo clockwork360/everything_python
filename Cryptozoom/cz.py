@@ -3,6 +3,7 @@
 import json, gspread, pprint, os, smtplib, hmac, hashlib, time, urllib.request, urllib.error, urllib.parse, cexio
 import time, websocket, requests, sched
 from cexio import *
+from auth_key import *
 from twilio_creds import *
 from twilio.rest import Client
 from requests import Session, Request
@@ -17,9 +18,9 @@ api_secret = os.environ['SECRET']
 '''
 
 #Get Keys
-username = 'up125942624' 
-api_key = 'QwHotLUGHkmShCNaYgjN52WC56Q'
-api_secret = 'XLMwB6aqxy9BULyua7u6im73E48'
+username = username 
+api_key = api_key
+api_secret = api_secret
 
 
 
@@ -473,7 +474,7 @@ if buyin > data34:
         eresult = ((float(_xlmusd3lp) - float(_xlmusd3bi))/abs(float(_xlmusd3bi)))
         xlmusd3_sheet = sheet.update_cell(34,8, "{:.0%}".format(eresult))
         #Get Current Price
-        xlmusd2_cp = sheet.update_cell(33,9, _xlmusd2lp)
+        xlmusd3_cp = sheet.update_cell(34,9, _xlmusd3lp)
         result2 = ((float(_xlmusd3lp) - float(_xlmusd3bi))/abs(float(_xlmusd3bi)))
         if result2 >= tpercent:
             sid = account_sid
