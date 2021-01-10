@@ -18,9 +18,13 @@ api_secret = os.environ['SECRET']
 '''
 
 #Get Keys
+<<<<<<< HEAD
 username = username 
 api_key = api_key
 api_secret = api_secret
+=======
+
+>>>>>>> 335b02e0615a24619761cd85d6aa2c28b9a67c75
 
 
 
