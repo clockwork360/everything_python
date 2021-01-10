@@ -3,3 +3,5 @@ gmail_creds.py
 twilio_creds.py
 creds.json
 __pycache__
+cryptozoom_iter
+cryptozoom
