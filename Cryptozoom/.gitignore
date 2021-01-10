@@ -11,4 +11,8 @@ __pycache__
 cryptozoom_iter
 cryptozoom
 .env
+<<<<<<< HEAD
 >>>>>>> 880380e1583b78b28d7a510d74a62ffd6d5580fd
+=======
+Cryptozoom2
+>>>>>>> d672341a88f1115a6fc0b4cb84f467da134ca17a
